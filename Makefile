@@ -11,6 +11,7 @@ problems=\
 	1008 \
 	1011 \
 	1065 \
+	1085 \
 	1110 \
 	1152 \
 	1157 \
@@ -38,12 +39,17 @@ problems=\
 	2884 \
 	2908 \
 	2941 \
+	3009 \
 	3052 \
+	3053 \
+	4153 \
 	4344 \
 	4673 \
+	4948 \
 	5622 \
 	8393 \
 	8958 \
+	9020 \
 	9498 \
 	10171 \
 	10172 \
@@ -71,7 +77,7 @@ answers=$(addprefix $(OUT_O_DIR)/,$(problems))
 
 all: $(answers)
 
-$(OUT_O_DIR)/%: $(IN_CPP_DIR)/%.cpp
+$(OUT_O_DIR)/%: $(IN_CPP_DIR)/%.cpp src/includes/basics.hpp
 	mkdir -p $(OUT_O_DIR)
 	$(CC) $(CFLAGS) $< -o $@
 

@@ -4,6 +4,12 @@
 #include <cmath>
 #include <assert.h>
 
+/*
+ * Sum of digits
+ * 
+ * @param integer number n
+ * @return the sum of digits of n
+ */
 int sumOfDigits(int n)
 {
 	assert(n >= 0);
@@ -17,6 +23,14 @@ int sumOfDigits(int n)
 	return s;
 }
 
+/*
+ * return whether an integer is prime
+ * 
+ * tries division of all odd numbers up to sqrt(n)
+ * 
+ * @param integer n
+ * @return boolean of whether prime
+ */
 bool isPrime(int n)
 {
 	assert(n > 0);
@@ -37,6 +51,39 @@ bool isPrime(int n)
 		}
 	}
 	return true;
+}
+
+/*
+ * Runs Sieve of Eratosthenes on given boolean array
+ * 
+ * Make sure that the given array is large enough
+ * Known Issue: If the size of the array is 2, it goes into inf loop
+ * 
+ * @param pointer to the boolean pArray and its size N
+ * @return void
+ */
+void primeSieve(bool* pArray, int N)
+{
+	pArray[0] = false;			// Ensure 1 is false
+	for (int i = 1; i < N; i++) // 2 to N is init to true
+		pArray[i] = true;
+
+	int p = 2; // global p
+
+	int lim = ceil(sqrt(N));
+	while (p <= lim)
+	{
+		for (int i = 2 * p - 1; i < N; i += p)
+			pArray[i] = false; // Multiple of p is false
+		for (int i = p; i < N; i++)
+		{
+			if (pArray[i])
+			{
+				p = i + 1;
+				break;
+			}
+		}
+	}
 }
 
 #endif // INCLUDE_BASICS_H
