@@ -89,7 +89,8 @@ problems=\
 	11653 \
 	11654 \
 	14681 \
-	15552
+	15552 \
+	15649
 
 answers=$(addprefix $(OUT_O_DIR)/,$(problems))
 
