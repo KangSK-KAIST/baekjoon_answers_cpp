@@ -89,7 +89,7 @@ bool checkSudoku(int *psudoku)
 	{
 		int piGroup[9];
 		for (int j = 0; j < 9; j++)
-			piGroup[j] = psudoku[(boxToYIndex(i) * 3 + boxToYIndex(j)) * 9 + boxToXIndex(i) * 3 + boxToXIndex(j)];
+			piGroup[j] = psudoku[(i / 3 * 3 + j / 3) * 9 + (i % 3) * 3 + j % 3];
 		if (!checkUnique(piGroup))
 			return false;
 	}
@@ -98,50 +98,54 @@ bool checkSudoku(int *psudoku)
 
 void backTrack(int *psudoku)
 {
-	std::cout << "b\n";
 	bool checkSpace = false;
 	for (int i = 0; i < 81; i++)
 	{
 		if (psudoku[i] == 0)
+		{
 			checkSpace = true;
+			break;
+		}
 	}
-	if (!checkSpace && checkSudoku(psudoku))
-	{
-		for (int k = 0; k < 81; k++)
-			ans[k] = psudoku[k];
-		return;
-	}
-
-	std::cout << "-----------------------\n";
-	for (int t = 0; t < 9; t++)
-	{
-		for (int u = 0; u < 9; u++)
-			std::cout << psudoku[t * 9 + u] << ' ';
-		std::cout << '\n';
+	if (!checkSpace)
+	{ // No space
+		if (checkSudoku(psudoku))
+		{
+			for (int k = 0; k < 81; k++)
+				ans[k] = psudoku[k];
+			return;
+		}
 	}
 
 	for (int i = 0; i < 81; i++)
 	{
 		if (psudoku[i] == 0)
 		{ // Found empty box
-			int r = i / 9;
-			int c = i % 9;
-			int by = (r / 3) * 3;
-			int bx = (c / 3) * 3;
+			int by = i / 27;
+			int bx = (i % 9) / 3;
 			for (int p = 1; p <= 9; p++)
 			{ // Predict
 				bool pass = false;
 				for (int t = 0; t < 9; t++)
 				{
 					// Check row
-					if (psudoku[r * 9 + t] == p)
+					if (psudoku[i] == p)
+					{
 						pass = true;
+						break;
+					}
 					// Check col
-					if (psudoku[t * 9 + c] == p)
+					if (psudoku[i] == p)
+					{
 						pass = true;
+						break;
+					}
 					// Check box
-					if (psudoku[(boxToXIndex(bx) * 3 + boxToXIndex(t)) * 9 + (boxToYIndex(by) * 3 + boxToYIndex(t))] == p)
-						p = true;
+					if (psudoku[(by * 3 + t / 3) * 9 + bx * 3 + t % 3] == p)
+					{
+						pass = true;
+						break;
+					}
 				}
 				if (pass)
 					continue;
@@ -152,6 +156,7 @@ void backTrack(int *psudoku)
 				pNewSudoku[i] = p;
 				backTrack(pNewSudoku);
 			}
+			return;
 		}
 	}
 }
@@ -161,27 +166,19 @@ int main(void)
 	std::cin.tie(NULL);
 	std::ios_base::sync_with_stdio(false);
 
-	int sudoku[81] = {};
+	int sudoku[81] = {0};
 
 	for (int i = 0; i < 81; i++)
 		std::cin >> sudoku[i];
-
-	std::cout << "-----------------------\n";
-	for (int t = 0; t < 9; t++)
-	{
-		for (int u = 0; u < 9; u++)
-			std::cout << ans[t * 9 + u] << ' ';
-		std::cout << '\n';
-	}
+	std::cin.clear();
 
 	backTrack(sudoku);
 
-	std::cout << "-----------------------\n";
 	for (int t = 0; t < 9; t++)
 	{
 		for (int u = 0; u < 9; u++)
 			std::cout << ans[t * 9 + u] << ' ';
-		std::cout << '\n';
+		std::cout << std::endl;
 	}
 
 	return 0;
