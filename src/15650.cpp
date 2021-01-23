@@ -1,5 +1,5 @@
-/* Copyright https://www.acmicpc.net/problem/15649
- * N and M
+/* Copyright https://www.acmicpc.net/problem/15650
+ * N and M 2
  * KangSK
  */
 
@@ -7,16 +7,6 @@
 #include <array>
 #include <vector>
 #include <algorithm>
-
-bool inVector(std::vector<int>* pn, int n)
-{
-	for (int i : *pn)
-	{
-		if (i == n)
-			return true;
-	}
-	return false;
-}
 
 void printAll(std::vector<int> n, int N, int M)
 {
@@ -27,14 +17,21 @@ void printAll(std::vector<int> n, int N, int M)
 		std::cout << '\n';
 		return;
 	}
-	for (int i = 1; i <= N; i++)
+	if (n.size() == 0)
 	{
-		if (!inVector(&n, i))
+		for (int i = 1; i <= N; i++)
 		{
-			std::vector<int> t = n;
+			std::vector<int> t;
 			t.push_back(i);
 			printAll(t, N, M);
 		}
+		return;
+	}
+	for (int i = n[n.size() - (size_t)1] + 1; i <= N; i++)
+	{
+		std::vector<int> t = n;
+		t.push_back(i);
+		printAll(t, N, M);
 	}
 }
 
